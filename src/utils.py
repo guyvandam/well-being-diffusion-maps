@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 from scipy.stats import sem, t
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler

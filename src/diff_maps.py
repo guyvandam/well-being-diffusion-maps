@@ -1,5 +1,5 @@
 import numpy as np
-from sacred import Experiment, Ingredient
+from sacred import Ingredient
 from sklearn.metrics import euclidean_distances
 
 diffusion_maps_ingredient = Ingredient("diffusion_maps")

@@ -7,7 +7,6 @@ from benedict import benedict
 from sacred import Experiment
 from sacred.observers import FileStorageObserver
 
-
 from dataset import Dataset, dataset_ingredient
 from utils import bootstrap
 
