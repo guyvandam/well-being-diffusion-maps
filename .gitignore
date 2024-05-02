@@ -1,3 +1,14 @@
+# scared
+run.json
+
+# dataset
+data/
+*.sav
+test/
+
+# mac
+*.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
