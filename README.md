@@ -1,28 +1,35 @@
 # well-being-diffusion-maps
 
-`assignment-2` - an applied question in assignment 2 \
-`final-assignment` - the final project - an implantation of [[1]](#1).                   
-
-
-Semester B 2023, by Dr. Nir Sharon, TAU
-
-
 Code Organization
 -----------------
 
-
-
 ```bash
-    ├── data/                        
-        └── 
-    ├── out/                        
-        └── src/                            # source code with plots
-    └── src/                    
-        ├── doc/                            # project document
-        └── src/                            # source code
+    ├── data/                               #dataset                        
+        └── dataset (.sav file)
+    ├── out/                                #output folder
+        ├── density-conjecture/
+        └── diff-maps-embedding/             
+    └── src/                                # source code
 ```
 
+# Running the code
+This code uses the Sacred [1] framework for experiment management.
+
+**running** `main.py` will run the algorithm with the parameters set in the `forward_main` configuration of the `dataset_ingredient` (dataset.py) and 
+the configuration presets in `diffusion_maps.py` and `main.py` files per the Sacred framework.
+
+
 ## References
-<a id="1"> Nir Sharon, Rafael Sherbu Cohen, and Holger Wendland. On multiscale quasi-interpolation of scattered
-scalar- and manifold-valued functions. SIAM Journal on Scientific Computing, 45(5):A2458–A2482, 2023
+<a id="1"> http://conference.scipy.org/proceedings/scipy2017/klaus_greff.html
+
+<a id="2">
+Ronald R. Coifman, Stéphane Lafon,
+Diffusion maps,
+Applied and Computational Harmonic Analysis,
+Volume 21, Issue 1,
+2006,
+Pages 5-30,
+ISSN 1063-5203,
+https://doi.org/10.1016/j.acha.2006.04.006.
+
 

@@ -82,6 +82,7 @@ def _run_diffusion_maps(
     """_run_diffusion_maps
 
     run diffusion maps embedding. check for existing runs and load the existing embedding if exists.
+    checking for existing files is done by comparing the config.json files in the out folder.
 
     Args:
         _log (_type_): logger. sacred.
