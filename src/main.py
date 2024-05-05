@@ -11,11 +11,11 @@ from sacred import SETTINGS, Experiment
 from sacred.observers import FileStorageObserver
 
 from dataset import Dataset, dataset_ingredient
-from diff_maps import diffusion_maps_ingredient, get_diffusion_coordinates
+from diffusion_maps import diffusion_maps_ingredient, get_diffusion_coordinates
 from utils import plot_3d_scatter, plot_3d_scatter_matplotlib
 
 # * output folderpath
-out_folderpath = Path().cwd().joinpath("out", "runs")
+out_folderpath = Path().cwd().joinpath("out", "diff-maps-embeddings")
 
 # * create an experiment
 ex = Experiment(
