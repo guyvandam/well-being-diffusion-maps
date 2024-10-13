@@ -5,6 +5,7 @@ run.json
 data/
 *.sav
 test/
+deprecated/
 
 # mac
 *.DS_Store

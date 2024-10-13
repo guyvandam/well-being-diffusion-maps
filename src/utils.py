@@ -9,7 +9,7 @@ from scipy.stats import sem, t
 from sklearn import datasets
 from sklearn.preprocessing import MinMaxScaler
 
-### * plot helper functions
+### * helper functions
 
 _plotly_tickformat = dict(tickformat=".2e")
 

@@ -1,10 +1,9 @@
 variable_dict = {
-    # "WCalib__": "weight",
     "WCalib": "weight",  # WCalib appears with no __ suffix in the .sav file.
     "Y16_Q4__": "life_satisfaction",
     "Y16_Q5__": "happiness",
     "Y16_Q14__": "hrs_worked_main_job",
-    "Y16_Q37__": "legal_marital_status",
+    "married": "is_married",
     "Y16_Q48__": "general_health",
     "Y16_Q58a__": "quality_health_services",
     "Y16_Q58b__": "quality_education_services",
@@ -23,6 +22,8 @@ variable_dict = {
     "Y16_Q51d_reversed": "woke_up_fresh",
     "Y16_Q51e_reversed": "interest_filled_life",
     "Well_being13__": "well_being_13",
-    "log_age__": "log_age",  # TODO: why log???
-    "index_quality_services__": "mean_q58_a_f",  # mean of Q58a to Q58f
+    "age_square": "age_square",
+    "Welfare_Type_Cat1": "welfare_type_category_1",
+    "Welfare_Type_Cat2": "welfare_type_category_2",
+    "Index_quality_of_services": "mean_q58_a_f",  # mean of Q58a to Q58f
 }

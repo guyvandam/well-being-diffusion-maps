@@ -9,32 +9,49 @@ from utils import remove_all_zero_rows, rescale
 
 dataset_ingredient = Ingredient("dataset")
 
-_sav_filepath = Path().cwd().joinpath("data", "eqls_integrated_trend_2003-2016 (1).sav")
+_SAV_FILEPATH = Path().cwd().joinpath("data", "eqls_integrated_trend_2003-2016.sav")
+MAIN_INPUT_VARIABLES: list[str] = [
+    "weight",
+    "hrs_worked_main_job",
+    "is_married",
+    "general_health",
+    "y16_num_children",
+    "y16_education",
+    "y16_income",
+    "age_square",
+    "quality_health_services",
+    "quality_education_services",
+    "quality_public_transport",
+    "quality_childcare_services",
+    "quality_longterm_care_services",
+    "quality_social_municipal_housing",
+    "quality_state_pension",
+]
+WELFARE_CATEGORY_LIST: list[str] = [
+    "welfare_type_category_1",
+    "welfare_type_category_2",
+]
 
 
+# main configuration (does not have the named_config decorator) - all subsequent configurations are named configurations
+# and are defined as the change to this (main) configuration.
 @dataset_ingredient.config
 def forward_main():
-    input_variable_list = [
-        "weight",
-        "hrs_worked_main_job",
-        "legal_marital_status",
-        "general_health",
-        "y16_num_children",
-        "y16_education",
-        "y16_income",
-        "log_age",
-        "quality_health_services",
-        "quality_education_services",
-        "quality_public_transport",
-        "quality_childcare_services",
-        "quality_longterm_care_services",
-        "quality_social_municipal_housing",
-        "quality_state_pension",
-    ]
+    input_variable_list = MAIN_INPUT_VARIABLES + [WELFARE_CATEGORY_LIST[0]]
     output_variable = "well_being_2"
-    # number of highest values rows to remove from the dataset
-    # after reweighing, around 20-50 rows are outliers. relevant for reweighing only.
-    num_rebalancing_rows = 30
+    num_rebalancing_rows = 30  # number of highest values rows to remove from the dataset after reweighing, around 20-50 rows are outliers. relevant for reweighing only.
+
+
+@dataset_ingredient.named_config
+def forward_main_welfare_type_2():
+    input_variable_list = MAIN_INPUT_VARIABLES + [WELFARE_CATEGORY_LIST[1]]
+
+
+@dataset_ingredient.named_config
+def all_welfare_regimes():
+    input_variable_list = (
+        MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
+    )  # include both categories
 
 
 @dataset_ingredient.named_config
@@ -42,12 +59,12 @@ def mean_q_services_forward():
     input_variable_list = [
         "weight",
         "hrs_worked_main_job",
-        "legal_marital_status",
+        "is_married",
         "general_health",
         "y16_num_children",
         "y16_education",
         "y16_income",
-        "log_age",
+        "age_square",
         "mean_q58_a_f",  # replace with mean of Q58a to Q58f - quality of services
     ]
 
@@ -72,12 +89,12 @@ def reverse():
     input_variable_list = [
         "weight",
         "hrs_worked_main_job",
-        "legal_marital_status",
+        "is_married",
         "general_health",
         "y16_num_children",
         "y16_education",
         "y16_income",
-        "log_age",
+        "age_square",
         # swappable
         "well_being_2",
     ]
@@ -123,10 +140,10 @@ class Dataset:
         """
         _log.debug("reading .sav file")
 
-        _ = _run.open_resource(_sav_filepath)
+        _ = _run.open_resource(_SAV_FILEPATH)
 
         # load sav file
-        self._df = pd.read_spss(_sav_filepath, usecols=variable_dict.keys(), convert_categoricals=False)  # type: ignore
+        self._df = pd.read_spss(_SAV_FILEPATH, usecols=variable_dict.keys(), convert_categoricals=False)  # type: ignore
         _log.info(
             f"loaded sav file with {len(self._df)} rows and {len(self._df.columns)} columns"
         )
@@ -165,9 +182,14 @@ class Dataset:
         # rescale first
         _rescale_wrapper()
 
-        # reweigh and drop the weight column
+        # reweigh and drop the weight column. Do not reweigh the welfare category columns.
         weight_series = self._df["weight"]
-        self._df = self._df.multiply(weight_series, axis="index")
+        non_welfare_columns = [
+            col for col in self._df.columns if col not in WELFARE_CATEGORY_LIST
+        ]
+        self._df[non_welfare_columns] = self._df[non_welfare_columns].multiply(
+            weight_series, axis="index"
+        )
         self._df.drop(columns=["weight"], inplace=True)
         _log.debug("reweighed data")
 
@@ -195,6 +217,7 @@ class Dataset:
 
         rebalance the left skewed dataset by removing the num_rebalancing_rows highest values.
         occurs after reweighing.
+        Do not rebalance the welfare category columns.
 
         Args:
             _log (_type_): _description_
@@ -204,6 +227,9 @@ class Dataset:
             return
 
         for col in self._df.columns:
+            if col in WELFARE_CATEGORY_LIST:
+                continue
+
             # sort from lowest to highest.
             self._df = self._df.sort_values(by=col, ascending=True)
             # remove the highest values
