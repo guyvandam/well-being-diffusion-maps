@@ -27,3 +27,19 @@ variable_dict = {
     "Welfare_Type_Cat2": "welfare_type_category_2",
     "Index_quality_of_services": "mean_q58_a_f",  # mean of Q58a to Q58f
 }
+
+# welfare regime enum
+# 1. Social Democratic
+# 2. Liberal
+# 3. Continental
+# 4. Mediterranean
+# 5. Eastern European
+# 6. Other
+welfare_regime_dict = {
+    1: "Social Democratic",
+    2: "Liberal",
+    3: "Continental",
+    4: "Mediterranean",
+    5: "Eastern European",
+    6: "Other",
+}

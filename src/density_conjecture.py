@@ -6,7 +6,7 @@ import pandas as pd
 from sacred import Ingredient
 
 from dataset import dataset_ingredient
-from utils import bootstrap
+from utils import bootstrap, tick_font_size
 
 
 # * create an experiment
@@ -92,9 +92,9 @@ def _plot(results_df: pd.DataFrame, filepath: Path, title: str | None = None):
 
     if title is not None:
         plt.title(title)
-    plt.xlabel("Bin index")
-    plt.ylabel("Diameter")
-
+    plt.xlabel("Bin index", fontsize=tick_font_size)
+    plt.ylabel("Diameter", fontsize=tick_font_size)
+    plt.tight_layout()
     plt.savefig(filepath)
 
 
@@ -155,7 +155,7 @@ def run_density_conjecture(
         results_df.loc[bin_idx, ("diameter", "ci_low", "ci_high")] = bin_diam, *ci  # type: ignore
 
     # plot the results
-    title = f"Bin diameters | # points: {len(df)} | # bootstraps : {n_bootstraps} \n binned by: {output_variable} | diameter percentile: {diam_percentile}"
+    title = f"Bin diameters | # points: {len(df)} | # bootstraps : {n_bootstraps} | binned by: {output_variable} | diameter percentile: {diam_percentile}"
     title += f"\n{additional_title}" if additional_title else ""  # add additional info
 
     _plot(

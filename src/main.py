@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 
 from dataset import Dataset, dataset_ingredient, WELFARE_CATEGORY_LIST
+from dataset_variables import welfare_regime_dict
 from diffusion_maps import diffusion_maps_ingredient, get_diffusion_coordinates
 from density_conjecture import density_conjecture_ingredient, run_density_conjecture
 from utils import plot_3d_scatter, plot_3d_scatter_matplotlib
@@ -135,6 +136,7 @@ def _plot(
     additional_id: str = "",
 ):
     parameters_string = f"{diffusion_coordinates.shape[0]} points | t={diffusion_maps['t']} | $\\epsilon$={diffusion_maps['epsilon']} | $\\alpha$={diffusion_maps['alpha']}"
+    additional_id = "\n" + additional_id if additional_id != "" else ""
     title = f"Diffusion Embedding on {parameters_string}{additional_id}"
     plot_filepath = lambda name: (
         parent_folderpath.joinpath(name)
@@ -293,7 +295,7 @@ def _run_welfare_regimes(
                     output_variable,
                     is_show=False,
                     parent_folderpath=regime_folderpath,
-                    additional_id=f" | {category} | welfare regime {regime_index}",
+                    additional_id=f" | {category} | welfare regime - {welfare_regime_dict[regime_index]}",
                 )
 
                 # run the density conjecture
@@ -302,11 +304,11 @@ def _run_welfare_regimes(
                     df=regime_df,
                     output_variable=output_variable,
                     folderpath=regime_folderpath,
-                    additional_title=f"{category} | welfare regime {regime_index}",
+                    additional_title=f"{category} | welfare regime - {welfare_regime_dict[regime_index]}",
                 )  # type: ignore
 
 
 @ex.automain
-def run():
-    # _run_diffusion_maps(is_force_process=True)  # type: ignore
-    _run_welfare_regimes(is_force_process=True)  # type: ignore
+def run(dataset):
+    _run_diffusion_maps(is_force_process=True)  # type: ignore
+    # _run_welfare_regimes(is_force_process=True)  # type: ignore

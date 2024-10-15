@@ -12,6 +12,24 @@ from sklearn.preprocessing import MinMaxScaler
 ### * helper functions
 
 _plotly_tickformat = dict(tickformat=".2e")
+tick_font_size = 14
+
+
+def set_tick_and_axis_label_fontsizes(
+    ax, tick_font_size: int, axis_label_font_size: int
+):
+    """
+    Set the font sizes for tick labels and axis labels.
+
+    Args:
+        ax: The axis object (e.g., matplotlib Axes).
+        tick_font_size (int): Font size for tick labels.
+        axis_label_font_size (int): Font size for axis labels.
+    """
+    ax.tick_params(axis="both", which="major", labelsize=tick_font_size)
+    ax.xaxis.label.set_size(axis_label_font_size)
+    ax.yaxis.label.set_size(axis_label_font_size)
+
 
 """remove all zero rows from a DataFrame"""
 remove_all_zero_rows = lambda df: df.loc[(df != 0).any(axis=1)]
@@ -109,6 +127,7 @@ def plot_3d_scatter_matplotlib(
     if is_show:
         plt.show()
     plt.savefig(filepath.with_suffix(".png"))
+    plt.tight_layout()
     plt.close()
 
 
@@ -163,15 +182,17 @@ def bar_plot(y_array: np.ndarray, title: str, filepath: Path | None = None, **kw
         plt.text(i + 1, v, str(round(v, 2)), ha="center", va="bottom")
 
     # x, y labels and title
-    plt.xlabel(kwargs.get("xlabel", None))
-    plt.ylabel(kwargs.get("ylabel", None))
-    plt.title(title)
+    plt.xlabel(kwargs.get("xlabel", None), fontsize=tick_font_size)
+    plt.ylabel(kwargs.get("ylabel", None), fontsize=tick_font_size)
+    set_tick_and_axis_label_fontsizes(plt.gca(), tick_font_size, tick_font_size)
+    plt.title(title, fontsize=tick_font_size)
 
     # save fig and clear all.
     plt.show() if filepath is None else plt.savefig(filepath)
 
     plt.cla()
     plt.clf()
+    plt.tight_layout()
     plt.close()
 
 
