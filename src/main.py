@@ -8,7 +8,11 @@ from typing import Callable
 import pandas as pd
 import numpy as np
 
-from dataset import Dataset, dataset_ingredient, WELFARE_CATEGORY_LIST
+from dataset import (
+    Dataset,
+    dataset_ingredient,
+    WELFARE_CATEGORY_LIST,
+)
 from dataset_variables import welfare_regime_dict
 from diffusion_maps import diffusion_maps_ingredient, get_diffusion_coordinates
 from density_conjecture import density_conjecture_ingredient, run_density_conjecture
@@ -49,6 +53,31 @@ def makedir(*args) -> Path:
 @ex.config
 def main():
     d = 3  # embedding dimensions
+
+
+# @ex.config_hook
+# def hook(config, command_name, logger):
+#     if command_name == "run_welfare_regimes":
+#         # config["dataset"]["input_variable_list"] = (
+#         #     MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
+#         # )
+#         # config.set
+#         config["dataset"]["input_variable_list"] = {}
+#         logger.debug("changed input variable list")
+#     return config
+
+
+# @dataset_ingredient.named_config
+# def all_welfare_regimes():
+#     dataset = {
+#         "input_variable_list": MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
+#     }
+
+
+# @ex.named_config
+# def all_welfare_regimes():
+#     dataset_ingredient = all_welfare_regimes_dataset
+#     run_all_welfare_regimes = True
 
 
 @ex.capture
@@ -166,13 +195,14 @@ def _plot(
 
 
 @ex.capture
-def _run_diffusion_maps(
+def run_diffusion_maps(
     _log,
     dataset,
     diffusion_maps,
     d: int,
     is_force_process: bool = False,
     n_points: int | None = None,
+    is_show: bool = False,
 ):
     """_run_diffusion_maps
 
@@ -216,11 +246,20 @@ def _run_diffusion_maps(
             diffusion_coordinates,
             output_variable_series,
             output_variable,
+            is_show=is_show,
         )
 
+        # run the density conjecture
+        run_density_conjecture(
+            _log,
+            df=ds.df,
+            output_variable=output_variable,
+            folderpath=makedir("density-conjecture"),
+        )  # type: ignore
 
-@ex.capture
-def _run_welfare_regimes(
+
+@ex.command
+def run_welfare_regimes(
     _log,
     dataset,
     diffusion_maps,
@@ -235,7 +274,7 @@ def _run_welfare_regimes(
 
     Args:
         _log (_type_): logger. sacred.
-        dataset (_type_): sacred dataset ingredient.
+        dataset (_type_): sacred dataset ingredient. - dictionary.
         diffusion_maps (_type_): sacred diffusion maps ingredient.
         d (int): diffusion maps embedding dimensions. part of sacred config.
         is_force_process (bool, optional): force process flag - recompute even if run exists. Defaults to False.
@@ -255,7 +294,9 @@ def _run_welfare_regimes(
         # run the diffusion maps for each welfare regime
         for category in WELFARE_CATEGORY_LIST:
             # drop the other categories
+
             other_categories = [c for c in WELFARE_CATEGORY_LIST if c != category]
+
             category_df = ds.df.drop(columns=other_categories)
             # group by the welfare regime
             for regime_index, (_, regime_df) in enumerate(
@@ -309,6 +350,11 @@ def _run_welfare_regimes(
 
 
 @ex.automain
-def run(dataset):
-    _run_diffusion_maps(is_force_process=True)  # type: ignore
-    # _run_welfare_regimes(is_force_process=True)  # type: ignore
+def run():
+    # run separated by different welfare regimes - e.g. python main.py dataset.welfare_regimes_type_1_wb2
+    run_welfare_regimes(
+        is_force_process=True,
+    )  # type: ignore
+
+    # run without separation by welfare regimes.
+    # run_diffusion_maps(is_force_process=True, is_show=True)  # type: ignore

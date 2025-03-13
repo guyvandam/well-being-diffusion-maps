@@ -9,16 +9,13 @@ from utils import remove_all_zero_rows, rescale
 
 dataset_ingredient = Ingredient("dataset")
 
-_SAV_FILEPATH = Path().cwd().joinpath("data", "eqls_integrated_trend_2003-2016.sav")
-MAIN_INPUT_VARIABLES: list[str] = [
+DATA_FILEPATH = Path().cwd().joinpath("data", "WBz.csv")
+
+MAIN_INPUT_VARIABLES = [
     "weight",
     "hrs_worked_main_job",
     "is_married",
     "general_health",
-    "y16_num_children",
-    "y16_education",
-    "y16_income",
-    "age_square",
     "quality_health_services",
     "quality_education_services",
     "quality_public_transport",
@@ -26,7 +23,15 @@ MAIN_INPUT_VARIABLES: list[str] = [
     "quality_longterm_care_services",
     "quality_social_municipal_housing",
     "quality_state_pension",
+    "mean_q58_a_f",
+    "y16_num_children",
+    "y16_education",
+    "y16_income",
+    "age",
+    "age_squared",
+    "gender",
 ]
+
 WELFARE_CATEGORY_LIST: list[str] = [
     "welfare_type_category_1",
     "welfare_type_category_2",
@@ -36,69 +41,28 @@ WELFARE_CATEGORY_LIST: list[str] = [
 # main configuration (does not have the named_config decorator) - all subsequent configurations are named configurations
 # and are defined as the change to this (main) configuration.
 @dataset_ingredient.config
-def forward_main():
-    input_variable_list = MAIN_INPUT_VARIABLES + [WELFARE_CATEGORY_LIST[0]]
-    output_variable = "well_being_2"
+def all_wb2():
+    input_variable_list = MAIN_INPUT_VARIABLES
+    output_variable = "wellbeing_2"
     num_rebalancing_rows = 30  # number of highest values rows to remove from the dataset after reweighing, around 20-50 rows are outliers. relevant for reweighing only.
 
 
 @dataset_ingredient.named_config
-def forward_main_welfare_type_2():
-    input_variable_list = MAIN_INPUT_VARIABLES + [WELFARE_CATEGORY_LIST[1]]
+def all_wb13():
+    input_variable_list = MAIN_INPUT_VARIABLES
+    output_variable = "wellbeing_13"
 
 
 @dataset_ingredient.named_config
-def all_welfare_regimes():
-    input_variable_list = (
-        MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
-    )  # include both categories
+def welfare_regimes_wb2():
+    input_variable_list = MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
+    output_variable = "wellbeing_2"
 
 
 @dataset_ingredient.named_config
-def mean_q_services_forward():
-    input_variable_list = [
-        "weight",
-        "hrs_worked_main_job",
-        "is_married",
-        "general_health",
-        "y16_num_children",
-        "y16_education",
-        "y16_income",
-        "age_square",
-        "mean_q58_a_f",  # replace with mean of Q58a to Q58f - quality of services
-    ]
-
-
-@dataset_ingredient.named_config
-def q_services_only_forward():
-    input_variable_list = [
-        "weight",
-        "quality_health_services",
-        "quality_education_services",
-        "quality_public_transport",
-        "quality_childcare_services",
-        "quality_longterm_care_services",
-        "quality_social_municipal_housing",
-        "quality_state_pension",
-    ]
-
-
-@dataset_ingredient.named_config
-def reverse():
-    # input_variables stay the same, swapping the well being with the mean quality of services.
-    input_variable_list = [
-        "weight",
-        "hrs_worked_main_job",
-        "is_married",
-        "general_health",
-        "y16_num_children",
-        "y16_education",
-        "y16_income",
-        "age_square",
-        # swappable
-        "well_being_2",
-    ]
-    output_variable = "mean_q58_a_f"
+def welfare_regimes_wb13():
+    input_variable_list = MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
+    output_variable = "wellbeing_13"
 
 
 class Dataset:
@@ -115,22 +79,22 @@ class Dataset:
 
         # load the data from .sav file
         self._df = pd.DataFrame()
-        self._load_sav_file()  # type: ignore
+        self._load_data_file()  # type: ignore
         self._process(n_points=n_points)  # type: ignore
 
         _log.info("dataset initialized successfully")
 
     @dataset_ingredient.capture
-    def _load_sav_file(
+    def _load_data_file(
         self,
         _run,
         _log,
         input_variable_list: List[str],
         output_variable: str,
     ):
-        """_load_sav_file
+        """_load_data_file
 
-        load .sav file, keep only input and output variables, remove missing values and all zero rows.
+        load data file - csv or sav, keep only input and output variables, remove missing values and all zero rows.
 
         Args:
             _run (_type_): scared run.
@@ -138,12 +102,24 @@ class Dataset:
             input_variable_list (List[str]): parameters to use as input. sacred.
             output_variable (str): output variable [well-being]. sacred.
         """
-        _log.debug("reading .sav file")
+        _log.debug("reading datafile file")
 
-        _ = _run.open_resource(_SAV_FILEPATH)
+        _ = _run.open_resource(DATA_FILEPATH)
 
         # load sav file
-        self._df = pd.read_spss(_SAV_FILEPATH, usecols=variable_dict.keys(), convert_categoricals=False)  # type: ignore
+        use_cols = list(variable_dict.keys())
+
+        if DATA_FILEPATH.suffix == ".csv":
+            self._df = pd.read_csv(
+                DATA_FILEPATH, usecols=use_cols, na_values=[".a", ".b"]
+            )
+        else:
+            self._df = pd.read_spss(
+                DATA_FILEPATH,
+                usecols=use_cols,
+                convert_categoricals=False,
+            )
+
         _log.info(
             f"loaded sav file with {len(self._df)} rows and {len(self._df.columns)} columns"
         )
@@ -227,6 +203,7 @@ class Dataset:
             return
 
         for col in self._df.columns:
+            # categorical variables are not reweighed.
             if col in WELFARE_CATEGORY_LIST:
                 continue
 
