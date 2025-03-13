@@ -1,0 +1,33 @@
+INFO - well-being-diffusion-maps - Running command 'run'
+INFO - well-being-diffusion-maps - Started run with ID "1"
+INFO - dataset._load_data_file - loaded sav file with 142435 rows and 22 columns
+INFO - dataset._load_data_file - retained only input and output variables. 21 columns remaining
+INFO - dataset._load_data_file - removed rows with missing values. 7156 rows remaining
+INFO - dataset._load_data_file - removed all zero rows. 7156 rows remaining
+INFO - dataset._process - final row count: 6616
+INFO - dataset.__init__ - dataset initialized successfully
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_1 - welfare regime 1
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_1 - welfare regime 2
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_1 - welfare regime 3
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_1 - welfare regime 4
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_1 - welfare regime 5
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_1 - welfare regime 6
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_2 - welfare regime 1
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_2 - welfare regime 2
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_2 - welfare regime 3
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_2 - welfare regime 4
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_2 - welfare regime 5
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+INFO - run_welfare_regimes - saving results for welfare_type_category_2 - welfare regime 6
+INFO - well-being-diffusion-maps - Completed after 0:00:15

@@ -1,0 +1,13 @@
+INFO - well-being-diffusion-maps - Running command 'run'
+INFO - well-being-diffusion-maps - Started run with ID "1"
+INFO - dataset._load_data_file - loaded sav file with 142435 rows and 20 columns
+INFO - dataset._load_data_file - retained only input and output variables. 19 columns remaining
+INFO - dataset._load_data_file - removed rows with missing values. 7156 rows remaining
+INFO - dataset._load_data_file - removed all zero rows. 7156 rows remaining
+INFO - dataset._process - final row count: 6615
+INFO - dataset.__init__ - dataset initialized successfully
+INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
+2025-01-29 09:23:03.918 python[36202:11885088] +[IMKClient subclass]: chose IMKClient_Modern
+2025-01-29 09:23:04.592 python[36202:11885088] The class 'NSSavePanel' overrides the method identifier.  This method is implemented by class 'NSWindow'
+2025-01-29 09:23:19.061 python[36202:11885088] +[IMKInputSession subclass]: chose IMKInputSession_Modern
+INFO - well-being-diffusion-maps - Completed after 0:02:34

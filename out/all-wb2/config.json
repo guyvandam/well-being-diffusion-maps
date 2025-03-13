@@ -1,0 +1,38 @@
+{
+  "d": 3,
+  "dataset": {
+    "input_variable_list": [
+      "weight",
+      "hrs_worked_main_job",
+      "is_married",
+      "general_health",
+      "quality_health_services",
+      "quality_education_services",
+      "quality_public_transport",
+      "quality_childcare_services",
+      "quality_longterm_care_services",
+      "quality_social_municipal_housing",
+      "quality_state_pension",
+      "mean_q58_a_f",
+      "y16_num_children",
+      "y16_education",
+      "y16_income",
+      "age",
+      "age_squared",
+      "gender"
+    ],
+    "num_rebalancing_rows": 30,
+    "output_variable": "wellbeing_2"
+  },
+  "density-conjecture2": {
+    "diam_percentile": 95,
+    "n_bins": 5,
+    "n_bootstraps": 1000
+  },
+  "diffusion_maps": {
+    "alpha": 0,
+    "epsilon": 1.2,
+    "t": 1
+  },
+  "seed": 687352235
+}

@@ -1,2 +1,0 @@
-INFO - density-conjecture - Running command 'main'
-INFO - density-conjecture - Started run with ID "1"

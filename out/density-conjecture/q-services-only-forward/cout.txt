@@ -1,8 +1,0 @@
-INFO - density-conjecture - Running command 'main'
-INFO - density-conjecture - Started run with ID "1"
-INFO - dataset._load_sav_file - loaded sav file with 142435 rows and 25 columns
-INFO - dataset._load_sav_file - retained only input and output variables. 9 columns remaining
-INFO - dataset._load_sav_file - removed rows with missing values. 42871 rows remaining
-INFO - dataset._load_sav_file - removed all zero rows. 42871 rows remaining
-INFO - dataset._process - final row count: 42570
-INFO - dataset.__init__ - dataset initialized successfully

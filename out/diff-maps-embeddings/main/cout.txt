@@ -1,8 +1,0 @@
-INFO - well-being-diffusion-maps - Running command 'run'
-INFO - well-being-diffusion-maps - Started run with ID "5"
-INFO - dataset._load_sav_file - loaded sav file with 142435 rows and 25 columns
-INFO - dataset._load_sav_file - retained only input and output variables. 16 columns remaining
-INFO - dataset._load_sav_file - removed rows with missing values. 7156 rows remaining
-INFO - dataset._load_sav_file - removed all zero rows. 7156 rows remaining
-INFO - dataset.__init__ - dataset initialized successfully
-INFO - diffusion_maps.get_diffusion_coordinates - computing diffusion coordinates
