@@ -42,31 +42,30 @@ WELFARE_CATEGORY_LIST: list[str] = [
 # and are defined as the change to this (main) configuration.
 @dataset_ingredient.config
 def all_wb2():
-    input_variable_list = MAIN_INPUT_VARIABLES
-    output_variable = "wellbeing_2"
-    num_rebalancing_rows = 30  # number of highest values rows to remove from the dataset after reweighing, around 20-50 rows are outliers. relevant for reweighing only.
+    input_variable_list = MAIN_INPUT_VARIABLES  # noqa: F841
+    output_variable = "wellbeing_2"  # noqa: F841
+    num_rebalancing_rows = 30  # number of highest values rows to remove from the dataset after reweighing, around 20-50 rows are outliers. relevant for reweighing only.  # noqa: F841
 
 
 @dataset_ingredient.named_config
 def all_wb13():
-    input_variable_list = MAIN_INPUT_VARIABLES
-    output_variable = "wellbeing_13"
+    input_variable_list = MAIN_INPUT_VARIABLES  # noqa: F841
+    output_variable = "wellbeing_13"  # noqa: F841
 
 
 @dataset_ingredient.named_config
 def welfare_regimes_wb2():
-    input_variable_list = MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
-    output_variable = "wellbeing_2"
+    input_variable_list = MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST  # noqa: F841
+    output_variable = "wellbeing_2"  # noqa: F841
 
 
 @dataset_ingredient.named_config
 def welfare_regimes_wb13():
-    input_variable_list = MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST
-    output_variable = "wellbeing_13"
+    input_variable_list = MAIN_INPUT_VARIABLES + WELFARE_CATEGORY_LIST  # noqa: F841
+    output_variable = "wellbeing_13"  # noqa: F841
 
 
 class Dataset:
-
     @dataset_ingredient.capture
     def __init__(self, _log, n_points: int | None = None) -> None:
         """__init__

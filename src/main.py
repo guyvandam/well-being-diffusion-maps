@@ -1,21 +1,20 @@
-import benedict
 from pathlib import Path
-from benedict import benedict
-from sacred import SETTINGS, Experiment
-from sacred.observers import FileStorageObserver
-from typing import Callable
 
-import pandas as pd
+import benedict
 import numpy as np
+import pandas as pd
+from benedict import benedict
+from sacred import Experiment
+from sacred.observers import FileStorageObserver
 
 from dataset import (
+    WELFARE_CATEGORY_LIST,
     Dataset,
     dataset_ingredient,
-    WELFARE_CATEGORY_LIST,
 )
 from dataset_variables import welfare_regime_dict
-from diffusion_maps import diffusion_maps_ingredient, get_diffusion_coordinates
 from density_conjecture import density_conjecture_ingredient, run_density_conjecture
+from diffusion_maps import diffusion_maps_ingredient, get_diffusion_coordinates
 from utils import plot_3d_scatter, plot_3d_scatter_matplotlib
 
 # * output folderpath
@@ -40,7 +39,8 @@ ex.observers.append(fp_observer)
 
 
 # join name with the results folder of the current run
-makepath: Callable[[str], Path] = lambda name: Path(fp_observer.dir).joinpath(name)  # type: ignore
+def makepath(name: str) -> Path:
+    return Path(fp_observer.dir).joinpath(name)
 
 
 def makedir(*args) -> Path:
@@ -52,7 +52,7 @@ def makedir(*args) -> Path:
 # main config
 @ex.config
 def main():
-    d = 3  # embedding dimensions
+    d = 3  # embedding dimensions # noqa: F841
 
 
 # @ex.config_hook
@@ -150,7 +150,7 @@ def _save_embeddings(
         ],
         axis=1,
     )
-    columns = [f"x{i+1}" for i in range(d)] + [output_variable]
+    columns = [f"x{i + 1}" for i in range(d)] + [output_variable]
     pd.DataFrame(data, columns=columns).to_csv(filepath, index=False)
 
 
@@ -167,15 +167,18 @@ def _plot(
     parameters_string = f"{diffusion_coordinates.shape[0]} points | t={diffusion_maps['t']} | $\\epsilon$={diffusion_maps['epsilon']} | $\\alpha$={diffusion_maps['alpha']}"
     additional_id = "\n" + additional_id if additional_id != "" else ""
     title = f"Diffusion Embedding on {parameters_string}{additional_id}"
-    plot_filepath = lambda name: (
-        parent_folderpath.joinpath(name)
-        if parent_folderpath is not None
-        else makepath(name)
-    )
+
+    def plot_filepath(name: str) -> Path:
+        return (
+            parent_folderpath.joinpath(name)
+            if parent_folderpath is not None
+            else makepath(name)
+        )
+
     # plot results with matplotlib
     plot_3d_scatter_matplotlib(
         data_3d=diffusion_coordinates,
-        filepath=plot_filepath(f"embedding-matplotlib"),
+        filepath=plot_filepath("embedding-matplotlib"),
         title=title,
         color_list=output_variable_series,
         color_bar_label=output_variable.replace("_", " "),
@@ -225,11 +228,12 @@ def run_diffusion_maps(
     if existing_filepath is not None and is_force_process is False:
         _log.info(f"experiment exists at {existing_filepath}")
     else:  # process from scratch.
-
         ds = Dataset(n_points=n_points)  # type: ignore
 
         # run the diffusion maps
-        diffusion_coordinates = get_diffusion_coordinates(X=ds.df.drop(columns=[output_variable]).values, d=d)  # type: ignore
+        diffusion_coordinates = get_diffusion_coordinates(
+            X=ds.df.drop(columns=[output_variable]).values, d=d
+        )  # type: ignore
         output_variable_series = ds.df[output_variable].to_numpy()
         # save the results
         _log.debug("saving the results")
@@ -289,7 +293,6 @@ def run_welfare_regimes(
     if existing_filepath is not None and is_force_process is False:
         _log.info(f"experiment exists at {existing_filepath}")
     else:  # process from scratch.
-
         ds = Dataset(n_points=n_points)  # type: ignore
         # run the diffusion maps for each welfare regime
         for category in WELFARE_CATEGORY_LIST:

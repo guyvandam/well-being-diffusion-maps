@@ -36,7 +36,10 @@ def set_tick_and_axis_label_fontsizes(
 
 
 """remove all zero rows from a DataFrame"""
-remove_all_zero_rows = lambda df: df.loc[(df != 0).any(axis=1)]
+
+
+def remove_all_zero_rows(df):
+    return df.loc[(df != 0).any(axis=1)]
 
 
 def rescale(df: pd.DataFrame) -> pd.DataFrame:
@@ -69,8 +72,9 @@ def confidence_interval(
     """
     n = len(sample_statistic_list)
     # mean and standard error
-    m, se = np.mean(sample_statistic_list), sem(
-        sample_statistic_list, nan_policy="omit", ddof=n - 1
+    m, se = (
+        np.mean(sample_statistic_list),
+        sem(sample_statistic_list, nan_policy="omit", ddof=n - 1),
     )
     # h = se * t_{n-1, 1 - alpha/2}
     h = se * t.ppf((1 + confidence_level) / 2.0, n - 1)
@@ -123,7 +127,9 @@ def plot_3d_scatter_matplotlib(
     # 3d scatter plot
     fig = plt.figure(figsize=(9, 7))
     ax = fig.add_subplot(projection="3d")
-    scatter = ax.scatter(data_3d[:, 0], data_3d[:, 1], data_3d[:, 2], c=color_list, s=50)  # type: ignore
+    scatter = ax.scatter(
+        data_3d[:, 0], data_3d[:, 1], data_3d[:, 2], c=color_list, s=50
+    )  # type: ignore
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")  # type: ignore

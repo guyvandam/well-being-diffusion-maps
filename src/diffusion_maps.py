@@ -5,11 +5,12 @@ from sklearn.metrics import euclidean_distances
 diffusion_maps_ingredient = Ingredient("diffusion_maps")
 
 
+# sacred config convention.
 @diffusion_maps_ingredient.config
 def main():
-    epsilon = 1.2
-    alpha = 0
-    t = 1
+    epsilon = 1.2  # noqa: F841
+    alpha = 0  # noqa: F841
+    t = 1  # noqa: F841
 
 
 @diffusion_maps_ingredient.capture
@@ -34,7 +35,7 @@ def get_diffusion_coordinates(
     _log.info("computing diffusion coordinates")
 
     # compute kernel matrix
-    _log.debug(f"computing kernel matrix")
+    _log.debug("computing kernel matrix")
     dists = euclidean_distances(X, X)  # distance matrix
     L = np.exp(-((dists**2) / epsilon))  # kernel matrix
 
@@ -51,7 +52,7 @@ def get_diffusion_coordinates(
     M = np.linalg.matrix_power(M, t)  # type: ignore
 
     # compute eigenvalues and eigenvectors
-    _log.debug(f"computing spectral decomposition of $M$")
+    _log.debug("computing spectral decomposition of $M$")
     eigvals, eigvecs = np.linalg.eigh(M)  # hermitian matrix (as a real symmetric)
 
     # reverse the order of the eigenvectors - now in descending order - biggest eigenvalue (1) is first (eigh returns ascending order)

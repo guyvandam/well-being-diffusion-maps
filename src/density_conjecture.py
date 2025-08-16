@@ -6,8 +6,7 @@ import pandas as pd
 from sacred import Ingredient
 
 from dataset import dataset_ingredient
-from utils import bootstrap, AXIS_LABEL_FONT_SIZE
-
+from utils import AXIS_LABEL_FONT_SIZE, bootstrap
 
 # * create an experiment
 density_conjecture_ingredient = Ingredient(
@@ -17,9 +16,9 @@ density_conjecture_ingredient = Ingredient(
 
 @density_conjecture_ingredient.config
 def cfg():
-    n_bins = 5
-    diam_percentile = 95  # percentile of the diameter
-    n_bootstraps = 1000
+    n_bins = 5  # noqa: F841
+    diam_percentile = 95  # percentile of the diameter # noqa: F841
+    n_bootstraps = 1000  # noqa: F841
 
 
 @density_conjecture_ingredient.capture
@@ -135,7 +134,7 @@ def run_density_conjecture(
     # log bin sizes in the results DataFrame
     results_df["bin_size"] = df["output_variable_bins"].value_counts()
     results_df["bin_range"] = [
-        f"{bins[i]}->{bins[i+1]}" for i in range(len(bins) - 1)
+        f"{bins[i]}->{bins[i + 1]}" for i in range(len(bins) - 1)
     ]  # no need for the first one
 
     # * calculate the diameter of each bin
