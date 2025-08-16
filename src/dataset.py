@@ -9,7 +9,7 @@ from utils import remove_all_zero_rows, rescale
 
 dataset_ingredient = Ingredient("dataset")
 
-DATA_FILEPATH = Path().cwd().joinpath("data", "WBz.csv")
+DATA_FILEPATH = Path().cwd().joinpath("data", "dataset.csv")
 
 MAIN_INPUT_VARIABLES = [
     "weight",

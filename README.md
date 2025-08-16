@@ -1,16 +1,19 @@
-# well-being-diffusion-maps [[1]](#references)
+# well-being-diffusion-maps [[1], [2]](#references)
 ![](out/all-wb2/diff-coord-wb2-1.png)
+
 
 Code Organization
 -----------------
 
 ```bash
-    ├── data/                               #dataset                        
+    ├── data/                               # dataset                        
         └── dataset (.sav file)
-    ├── out/                                #output folder
+    ├── out/                                # output folder
         ├── density-conjecture/
         └── diff-maps-embedding/             
-    └── src/                                # source code
+    └── src/     
+        ├── ...
+        └── main.py                        # source code
 ```
 
 # Running the code
@@ -27,7 +30,9 @@ running all welfare regimes:
 
 
 ## References
-[1] Ronald R. Coifman and Stéphane Lafon. "Diffusion maps." *Applied and Computational Harmonic Analysis*, Volume 21, Issue 1, 2006, Pages 5-30. https://doi.org/10.1016/j.acha.2006.04.006
+[1] Lahat, Lihi and Sharony, Chen and Van-Dam, Guy and Sharon, Nir. "The Relationship Between Perceptions of Social Service Quality and Subjective Well-Being." *Social Policy \& Administration*, 2025. https://doi.org/10.1111/spol.13141
 
-[2] Klaus Greff, Aaron Klein, Martin Chovanec, Frank Hutter, and Jürgen Schmidhuber. "The Sacred Infrastructure for Computational Research." *Proceedings of the 16th Python in Science Conference*, 2017. http://conference.scipy.org/proceedings/scipy2017/klaus_greff.html
+[2] Ronald R. Coifman and Stéphane Lafon. "Diffusion maps." *Applied and Computational Harmonic Analysis*, Volume 21, Issue 1, 2006, Pages 5-30. https://doi.org/10.1016/j.acha.2006.04.006
+
+[3] Klaus Greff, Aaron Klein, Martin Chovanec, Frank Hutter, and Jürgen Schmidhuber. "The Sacred Infrastructure for Computational Research." *Proceedings of the 16th Python in Science Conference*, 2017. http://conference.scipy.org/proceedings/scipy2017/klaus_greff.html
 
